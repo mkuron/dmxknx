@@ -16,7 +16,7 @@ def close():
 def send(msg):
 	global s
 	print msg
-	#s.send(msg + "\n")
+	s.send(msg + "\n")
 
 def turn_on(name):
 	send('set %s on ' % name)
@@ -25,7 +25,7 @@ def turn_off(name):
 	send('set %s off ' % name)
 
 def set_value(name, value):
-	send('set %s value %d' % (name,int(value/2.55)))
+	send('set %s value %d' % (name,int(round(value/2.55))))
 
 if __name__ == '__main__':
 	import time

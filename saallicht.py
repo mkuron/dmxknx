@@ -32,7 +32,7 @@ def dmx_changed(channel, val):
 	if channels[channel] != '':
 		knxchan = channels[channel] + suf
 		if suf == suffix_value:
-			fhem.set_value(knxchan, int(round(val/2.55)))
+			fhem.set_value(knxchan, val)
 		elif val < 128:
 			fhem.turn_off(knxchan)
 		else:
@@ -41,14 +41,16 @@ def dmx_changed(channel, val):
 
 last_change = [time.time()] * 512
 dmx_old = [dmx.get_dmx(i) for i in range(512)] # TODO: manchmal null
-print dmx_old
 
+fhem.connect('localhost', 7072)
 while True:
 	for i in range(512):
 		val = dmx.get_dmx(i)
 		if i+1 == channel_switch:
 			suf = suffix(val)
+			continue
 		if dmx_old[i] != val:
 			if dmx_changed(i, val) == True:
 				dmx_old[i] = val
 	time.sleep(loop_pause)
+fhem.close()
